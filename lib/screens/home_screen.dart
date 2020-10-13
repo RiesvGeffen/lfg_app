@@ -28,39 +28,37 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> widgetList = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    List<String> widgetList = ['A', 'B', 'C', 'D', 'E', 'C', 'D', 'E', 'F'];
     var size = MediaQuery.of(context).size;
     final double itemHeight =
         (size.height - kToolbarHeight - kBottomNavigationBarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-      ),
-      body: new Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                'Home',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          const SliverAppBar(
+            pinned: true,
+            expandedHeight: 150,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text('Popular'),
             ),
           ),
-          Expanded(
-            child: new GridView.count(
-              crossAxisCount: 2,
+          SliverGrid(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200.0,
+              mainAxisSpacing: 1.0,
+              crossAxisSpacing: 1.0,
               childAspectRatio: (itemWidth / itemHeight),
-              children: widgetList.map((String value) {
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
                 return new Container(
                   color: Colors.green,
                   margin: new EdgeInsets.all(1.0),
                   child: new Center(
                     child: new Text(
-                      value,
+                      widgetList[index],
                       style: new TextStyle(
                         fontSize: 50.0,
                         color: Colors.white,
@@ -68,10 +66,19 @@ class HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 );
-              }).toList(),
+              },
+              childCount: widgetList.length,
             ),
           ),
-          Text('All games')
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'All games',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -99,14 +106,4 @@ class HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  Widget _buildGrid() => GridView.extent(
-      maxCrossAxisExtent: 150,
-      padding: const EdgeInsets.all(4),
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
-      children: _buildGridTileList(30));
-
-  List<Container> _buildGridTileList(int count) =>
-      List.generate(count, (i) => Container(child: Text('Container$i')));
 }

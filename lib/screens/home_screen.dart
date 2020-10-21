@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lfg_app/screens/browse_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -18,17 +19,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<String> widgetList = ['A', 'B', 'C', 'D', 'E', 'C', 'D', 'E', 'F'];
+    List<String> widgetList = ['A', 'B', 'C', 'D', 'E', 'F'];
     var size = MediaQuery.of(context).size;
     final double itemHeight =
         (size.height - kToolbarHeight - kBottomNavigationBarHeight - 24) / 3;
@@ -73,36 +66,22 @@ class HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: Text(
-                'All games',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              child: new GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BrowseScreen(),
+                      ));
+                },
+                child: Text(
+                  'All games',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           )
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 40, 44, 52),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_box),
-            title: Text('Add'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 117, 190, 255),
-        unselectedItemColor: Colors.white,
-        onTap: _onItemTapped,
       ),
     );
   }

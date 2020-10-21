@@ -19,7 +19,7 @@ class LfgAppState extends State<LfgApp> {
       tabBar: CupertinoTabBar(
         activeColor: Color.fromARGB(255, 117, 190, 255),
         inactiveColor: Colors.white,
-        backgroundColor: Color.fromARGB(255, 40, 44, 52),
+        backgroundColor: Color.fromARGB(255, 33, 37, 43),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

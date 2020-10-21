@@ -69,23 +69,30 @@ class HomeScreenState extends State<HomeScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: new GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BrowseScreen(),
-                        ));
-                  },
-                  child: Text(
-                    'All games',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
+                child: Container(
+              margin: EdgeInsets.all(10),
+              child: RaisedButton(
+                color: Color.fromARGB(255, 44, 49, 58),
+                textColor: Colors.white,
+                onPressed: () => {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BrowseScreen(),
+                      ))
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("All games", style: TextStyle(fontSize: 20)),
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Icon(Icons.navigate_next),
+                    )
+                  ],
                 ),
               ),
-            )
+            ))
           ],
         ),
       ),

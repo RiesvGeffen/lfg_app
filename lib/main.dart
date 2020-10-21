@@ -16,7 +16,7 @@ void main() {
     ],
     theme: CupertinoThemeData(
         scaffoldBackgroundColor: Color.fromARGB(255, 40, 44, 52),
-        barBackgroundColor: Color.fromARGB(255, 40, 44, 52),
+        barBackgroundColor: Color.fromARGB(255, 33, 37, 43),
         textTheme: CupertinoTextThemeData(
           textStyle: TextStyle(color: Colors.white),
         )),

@@ -17,20 +17,21 @@ class LfgAppState extends State<LfgApp> {
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
-        backgroundColor:
-            CupertinoTheme.of(context).barBackgroundColor.withOpacity(1.0),
-        items: const <BottomNavigationBarItem>[
+        activeColor: Color.fromARGB(255, 117, 190, 255),
+        inactiveColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 40, 44, 52),
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_box),
-            title: Text('Add'),
+            title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text('Profile'),
+            title: Container(),
           ),
         ],
       ),

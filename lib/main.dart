@@ -14,5 +14,11 @@ void main() {
       DefaultMaterialLocalizations.delegate,
       DefaultWidgetsLocalizations.delegate,
     ],
+    theme: CupertinoThemeData(
+        scaffoldBackgroundColor: Color.fromARGB(255, 40, 44, 52),
+        barBackgroundColor: Color.fromARGB(255, 40, 44, 52),
+        textTheme: CupertinoTextThemeData(
+          textStyle: TextStyle(color: Colors.white),
+        )),
   ));
 }

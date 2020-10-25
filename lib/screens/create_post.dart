@@ -10,12 +10,13 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class CreatePostScreenState extends State<CreatePostScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final gamerIdTextController = TextEditingController();
+  final titleTextController = TextEditingController();
+  int gameSelectedValue = 0;
+  int platformSelectedValue = 0;
 
   @override
   Widget build(BuildContext context) {
-    int selectedValue;
-
     return CupertinoPageScaffold(
       child: Column(
         children: [
@@ -30,172 +31,203 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 )),
           ),
-          Form(
-            key: _formKey,
-            child: Container(
-              margin: EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                children: [
-                  // GAME
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: 4,
-                            bottom: 5,
-                            top: 20,
-                          ),
-                          child: Text(
-                            'GAME',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(letterSpacing: 1.5),
-                          ),
+          Container(
+            margin: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              children: [
+                // GAME
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: 4,
+                          bottom: 5,
+                          top: 20,
                         ),
-                        CupertinoPicker(
+                        child: Text(
+                          'GAME',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(letterSpacing: 1.5),
+                        ),
+                      ),
+                      CupertinoPicker(
+                        onSelectedItemChanged: (value) {
+                          setState(() {
+                            gameSelectedValue = value;
+                          });
+                        },
+                        itemExtent: 30,
+                        children: const [
+                          Text(
+                            'Select your game',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic),
+                          ),
+                          Text(
+                            'Rocket League',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            'Call of Duty: Modern Warfare',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            'Minecraft',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                // PLATFORM
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                          left: 4,
+                          bottom: 5,
+                          top: 20,
+                        ),
+                        child: Text(
+                          'PLATFORM',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(letterSpacing: 1.5),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: CupertinoPicker(
                           onSelectedItemChanged: (value) {
                             setState(() {
-                              selectedValue = value;
+                              platformSelectedValue = value;
                             });
                           },
                           itemExtent: 30,
                           children: const [
                             Text(
-                              'Rocket League',
+                              'Select your platform',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontStyle: FontStyle.italic),
+                            ),
+                            Text(
+                              'Playstation',
                               style: TextStyle(color: Colors.white),
                             ),
                             Text(
-                              'Call of Duty: Modern Warfare',
+                              'Xbox',
                               style: TextStyle(color: Colors.white),
                             ),
                             Text(
-                              'Minecraft',
+                              'PC',
                               style: TextStyle(color: Colors.white),
                             ),
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                  // PLATFORM
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            left: 4,
-                            bottom: 5,
-                            top: 20,
-                          ),
-                          child: Text(
-                            'PLATFORM',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(letterSpacing: 1.5),
-                          ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: CupertinoPicker(
-                            onSelectedItemChanged: (value) {
-                              setState(() {
-                                selectedValue = value;
-                              });
-                            },
-                            itemExtent: 30,
-                            children: const [
-                              Text(
-                                'Playstation',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                'Xbox',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                'PC',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                  // GAMER ID
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 4),
-                          child: Text(
-                            'GAMER ID',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(letterSpacing: 1.5),
-                          ),
+                ),
+                // GAMER ID
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 4),
+                        child: Text(
+                          'GAMER ID',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(letterSpacing: 1.5),
                         ),
-                        CupertinoTextField(
-                          cursorColor: Color.fromARGB(255, 117, 190, 255),
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(0, 0, 0, 0),
-                              border: Border(
-                                  bottom: BorderSide(
-                                color: Color.fromARGB(255, 56, 62, 74),
-                                width: 2,
-                              ))),
-                        )
-                      ],
-                    ),
-                  ),
-                  // TITLE
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 4),
-                          child: Text(
-                            'TITLE',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(letterSpacing: 1.5),
-                          ),
-                        ),
-                        CupertinoTextField(
-                          cursorColor: Color.fromARGB(255, 117, 190, 255),
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(0, 0, 0, 0),
-                              border: Border(
-                                  bottom: BorderSide(
-                                color: Color.fromARGB(255, 56, 62, 74),
-                                width: 2,
-                              ))),
-                        )
-                      ],
-                    ),
-                  ),
-                  // BUTTON
-                  SizedBox(
-                    width: double.infinity,
-                    child: RaisedButton(
-                      color: Color.fromARGB(255, 56, 62, 74),
-                      child: Text(
-                        'POST',
-                        style:
-                            TextStyle(color: Colors.white, letterSpacing: 1.5),
                       ),
-                      onPressed: () {},
+                      CupertinoTextField(
+                        controller: gamerIdTextController,
+                        cursorColor: Color.fromARGB(255, 117, 190, 255),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(0, 0, 0, 0),
+                            border: Border(
+                                bottom: BorderSide(
+                              color: Color.fromARGB(255, 56, 62, 74),
+                              width: 2,
+                            ))),
+                      )
+                    ],
+                  ),
+                ),
+                // TITLE
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 4),
+                        child: Text(
+                          'TITLE',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(letterSpacing: 1.5),
+                        ),
+                      ),
+                      CupertinoTextField(
+                        controller: titleTextController,
+                        cursorColor: Color.fromARGB(255, 117, 190, 255),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(0, 0, 0, 0),
+                            border: Border(
+                                bottom: BorderSide(
+                              color: Color.fromARGB(255, 56, 62, 74),
+                              width: 2,
+                            ))),
+                      )
+                    ],
+                  ),
+                ),
+                // BUTTON
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    color: Color.fromARGB(255, 56, 62, 74),
+                    child: Text(
+                      'POST',
+                      style: TextStyle(color: Colors.white, letterSpacing: 1.5),
                     ),
-                  )
-                ],
-              ),
+                    onPressed: () {
+                      submitForm();
+                    },
+                  ),
+                )
+              ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  submitForm() {
+    // Get values
+    int game = gameSelectedValue;
+    int platform = platformSelectedValue;
+    String gamerId = gamerIdTextController.text.trim();
+    String title = titleTextController.text.trim();
+
+    // Validation
+    if (game == 0 || platform == 0 || gamerId == '' || title == '') {
+      // Form is not valid
+      return;
+    }
+
+    debugPrint(game.toString());
+    debugPrint(platform.toString());
+    debugPrint(gamerId);
+    debugPrint(title);
   }
 }

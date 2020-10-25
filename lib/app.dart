@@ -5,6 +5,8 @@ import 'package:lfg_app/screens/create_post.dart';
 import 'package:lfg_app/screens/home_screen.dart';
 import 'package:lfg_app/screens/profile_screen.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+
 class LfgApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -13,8 +15,45 @@ class LfgApp extends StatefulWidget {
 }
 
 class LfgAppState extends State<LfgApp> {
+  bool _initialized = false;
+  bool _error = false;
+
+  void initializeFlutterFire() async {
+    try {
+      await Firebase.initializeApp();
+      setState(() {
+        _initialized = true;
+      });
+    } catch (e) {
+      setState(() {
+        _error = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    initializeFlutterFire();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Show error message if initialization failed
+    if (_error) {
+      return Center(
+        child: Text(_error.toString()),
+      );
+    }
+
+    // Show a loader until FlutterFire is initialized
+    if (!_initialized) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    // Main view
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         activeColor: Color.fromARGB(255, 117, 190, 255),

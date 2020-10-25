@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({Key key}) : super(key: key);
@@ -14,6 +15,8 @@ class CreatePostScreenState extends State<CreatePostScreen> {
   final titleTextController = TextEditingController();
   int gameSelectedValue = 0;
   int platformSelectedValue = 0;
+
+  CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +215,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  submitForm() {
+  submitForm() async {
     // Get values
     int game = gameSelectedValue;
     int platform = platformSelectedValue;
@@ -229,5 +232,17 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     debugPrint(platform.toString());
     debugPrint(gamerId);
     debugPrint(title);
+
+    await posts
+        .add({
+          'game': game.toString(),
+          'platform': platform.toString(),
+          'gamerId': gamerId,
+          'title': title
+        })
+        .then((value) => print("Post Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+
+    // TODO: Add success handling
   }
 }

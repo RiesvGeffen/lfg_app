@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lfg_app/models/game_model.dart';
 
 class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({Key key}) : super(key: key);
@@ -16,7 +17,35 @@ class CreatePostScreenState extends State<CreatePostScreen> {
   int gameSelectedValue = 0;
   int platformSelectedValue = 0;
 
-  CollectionReference posts = FirebaseFirestore.instance.collection('posts');
+  CollectionReference postsCollection =
+      FirebaseFirestore.instance.collection('posts');
+
+  CollectionReference gamesCollection =
+      FirebaseFirestore.instance.collection('games');
+  List<dynamic> games;
+
+  Future<List<Game>> futureGames;
+
+  @override
+  void initState() {
+    super.initState();
+    futureGames = fetchGames();
+  }
+
+  Future<List<Game>> fetchGames() async {
+    final response = await gamesCollection.get();
+
+    if (response.size > 0) {
+      List<Game> gamesList = List();
+      response.docs.forEach((element) {
+        Game game = Game.fromJson(element.data(), element.id);
+        gamesList.add(game);
+      });
+      return gamesList;
+    } else {
+      throw Exception('Empty response');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,34 +84,38 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                           style: TextStyle(letterSpacing: 1.5),
                         ),
                       ),
-                      CupertinoPicker(
-                        onSelectedItemChanged: (value) {
-                          setState(() {
-                            gameSelectedValue = value;
-                          });
-                        },
-                        itemExtent: 30,
-                        children: const [
-                          Text(
-                            'Select your game',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontStyle: FontStyle.italic),
-                          ),
-                          Text(
-                            'Rocket League',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            'Call of Duty: Modern Warfare',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Text(
-                            'Minecraft',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      )
+                      FutureBuilder(
+                          future: futureGames,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Game>> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return Text('${snapshot.error}');
+                              }
+                              if (!snapshot.hasData) {
+                                return Text('No Data Found');
+                              }
+                              return CupertinoPicker(
+                                onSelectedItemChanged: (value) {
+                                  setState(() {
+                                    gameSelectedValue = value;
+                                  });
+                                },
+                                itemExtent: 30,
+                                children: snapshot.data
+                                    .map((game) => Text(
+                                          game.title,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontStyle: FontStyle.italic),
+                                        ))
+                                    .toList(),
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          })
                     ],
                   ),
                 ),
@@ -233,11 +266,11 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     debugPrint(gamerId);
     debugPrint(title);
 
-    await posts
+    await postsCollection
         .add({
-          'game': game.toString(),
-          'platform': platform.toString(),
-          'gamerId': gamerId,
+          // 'game': game.toString(),
+          // 'platform': platform.toString(),
+          // 'gamerId': gamerId,
           'title': title
         })
         .then((value) => print("Post Added"))

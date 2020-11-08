@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "129793919781",
-    "firebase_url": "https://lfg-app-d0c23.firebaseio.com",
-    "project_id": "lfg-app-d0c23",
-    "storage_bucket": "lfg-app-d0c23.appspot.com"
+    "project_number": "1027826924373",
+    "firebase_url": "https://lfg-app-95b6c.firebaseio.com",
+    "project_id": "lfg-app-95b6c",
+    "storage_bucket": "lfg-app-95b6c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:129793919781:android:6c55adf5355b49f4dba8cc",
+        "mobilesdk_app_id": "1:1027826924373:android:9fdf3cfae8480c2de00ddc",
         "android_client_info": {
           "package_name": "com.example.lfg_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "129793919781-68pgnb768grsurk86b20sn9tn601ii2n.apps.googleusercontent.com",
+          "client_id": "1027826924373-jnjetldose8iblfr0ajvvqcftpp643o8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD8h8W5vKWfLkKGrque6yocmvqkDEJ881I"
+          "current_key": "AIzaSyARFNv5cxgopT09mWWQKlWd4RcexQe308Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "129793919781-68pgnb768grsurk86b20sn9tn601ii2n.apps.googleusercontent.com",
+              "client_id": "1027826924373-jnjetldose8iblfr0ajvvqcftpp643o8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

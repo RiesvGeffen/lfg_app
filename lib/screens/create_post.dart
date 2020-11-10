@@ -268,9 +268,9 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 
     await postsCollection
         .add({
-          // 'game': game.toString(),
-          // 'platform': platform.toString(),
-          // 'gamerId': gamerId,
+          'game': game.toString(),
+          'platform': platform.toString(),
+          'gamerId': gamerId,
           'title': title
         })
         .then((value) => print("Post Added"))

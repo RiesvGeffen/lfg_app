@@ -22,9 +22,9 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 
   CollectionReference gamesCollection =
       FirebaseFirestore.instance.collection('games');
-  List<dynamic> games;
 
   Future<List<Game>> futureGames;
+  List<Game> allGames;
 
   @override
   void initState() {
@@ -41,6 +41,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
         Game game = Game.fromJson(element.data(), element.id);
         gamesList.add(game);
       });
+      this.allGames = gamesList;
       return gamesList;
     } else {
       throw Exception('Empty response');
@@ -250,26 +251,35 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 
   submitForm() async {
     // Get values
-    int game = gameSelectedValue;
-    int platform = platformSelectedValue;
+    int platformId = platformSelectedValue;
     String gamerId = gamerIdTextController.text.trim();
     String title = titleTextController.text.trim();
 
     // Validation
-    if (game == 0 || platform == 0 || gamerId == '' || title == '') {
+    if (platformId == 0 || gamerId == '' || title == '') {
       // Form is not valid
       return;
     }
 
-    debugPrint(game.toString());
-    debugPrint(platform.toString());
-    debugPrint(gamerId);
-    debugPrint(title);
+    String gameId = this.allGames.elementAt(gameSelectedValue).id;
+
+    String platform;
+    switch (platformId) {
+      case 1:
+        platform = "Playstation";
+        break;
+      case 2:
+        platform = "Xbox";
+        break;
+      case 3:
+        platform = "PC";
+        break;
+    }
 
     await postsCollection
         .add({
-          'game': game.toString(),
-          'platform': platform.toString(),
+          'game': gameId,
+          'platform': platform,
           'gamerId': gamerId,
           'title': title
         })

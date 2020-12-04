@@ -73,6 +73,19 @@ class LfgAppState extends State<LfgApp> {
             title: Container(),
           ),
         ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              homeTabNavKey.currentState.popUntil((r) => r.isFirst);
+              break;
+            case 1:
+              createPostTabNavKey.currentState.popUntil((r) => r.isFirst);
+              break;
+            case 2:
+              profileTabNavKey.currentState.popUntil((r) => r.isFirst);
+              break;
+          }
+        },
       ),
       tabBuilder: (context, index) {
         if (index == 0) {

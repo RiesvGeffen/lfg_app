@@ -15,7 +15,6 @@ class BrowseScreen extends StatefulWidget {
 class BrowseScreenState extends State<BrowseScreen> {
   CollectionReference gamesCollection =
       FirebaseFirestore.instance.collection('games');
-  List<dynamic> games;
 
   Future<List<Game>> futureGames;
 
@@ -90,7 +89,9 @@ class BrowseScreenState extends State<BrowseScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              PostOverviewScreen(),
+                                              PostOverviewScreen(
+                                                  id: game.id,
+                                                  title: game.title),
                                         ))
                                   },
                                   child: new Center(

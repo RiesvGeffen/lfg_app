@@ -24,7 +24,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   CollectionReference gamesCollection =
       FirebaseFirestore.instance.collection('games');
-  List<dynamic> games;
 
   Future<List<Game>> futureGames;
 

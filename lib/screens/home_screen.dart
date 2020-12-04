@@ -54,7 +54,7 @@ class HomeScreenState extends State<HomeScreen> {
     final double itemHeight =
         (size.height - kToolbarHeight - kBottomNavigationBarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
-
+    print(size.width);
     return CupertinoPageScaffold(
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -82,8 +82,8 @@ class HomeScreenState extends State<HomeScreen> {
                       return Text('No Data Found');
                     }
                     return SliverGrid(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200.0,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
                         mainAxisSpacing: 1.0,
                         crossAxisSpacing: 1.0,
                         childAspectRatio: (itemWidth / itemHeight),

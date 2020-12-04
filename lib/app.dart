@@ -62,27 +62,24 @@ class LfgAppState extends State<LfgApp> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_box),
-            title: Container(),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Container(),
           ),
         ],
         onTap: (index) {
           switch (index) {
             case 0:
-              homeTabNavKey.currentState.popUntil((r) => r.isFirst);
+              homeTabNavKey.currentState?.popUntil((r) => r.isFirst);
               break;
             case 1:
-              createPostTabNavKey.currentState.popUntil((r) => r.isFirst);
+              createPostTabNavKey.currentState?.popUntil((r) => r.isFirst);
               break;
             case 2:
-              profileTabNavKey.currentState.popUntil((r) => r.isFirst);
+              profileTabNavKey.currentState?.popUntil((r) => r.isFirst);
               break;
           }
         },

@@ -70,6 +70,7 @@ class HomeScreenState extends State<HomeScreen> {
         },
         body: CustomScrollView(
           slivers: <Widget>[
+            SliverToBoxAdapter(),
             FutureBuilder(
                 future: futureGames,
                 builder:

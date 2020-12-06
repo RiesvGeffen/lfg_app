@@ -81,7 +81,7 @@ class BrowseScreenState extends State<BrowseScreen> {
                       ),
                       children: snapshot.data
                           .map((game) => Container(
-                                color: Colors.green,
+                                color: Colors.blue,
                                 margin: new EdgeInsets.all(1.0),
                                 child: GestureDetector(
                                   onTap: () => {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lfg_app/models/game_model.dart';
+import 'package:lfg_app/screens/post_details.dart';
 
 class CreatePostScreen extends StatefulWidget {
   CreatePostScreen({Key key}) : super(key: key);
@@ -262,6 +263,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     }
 
     String gameId = this.allGames.elementAt(gameSelectedValue).id;
+    String gameTitle = this.allGames.elementAt(gameSelectedValue).title;
 
     String platform;
     switch (platformId) {
@@ -276,16 +278,22 @@ class CreatePostScreenState extends State<CreatePostScreen> {
         break;
     }
 
-    await postsCollection
-        .add({
-          'game': gameId,
-          'platform': platform,
-          'gamerId': gamerId,
-          'title': title
-        })
-        .then((value) => print("Post Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+    await postsCollection.add({
+      'game': gameId,
+      'platform': platform,
+      'gamerId': gamerId,
+      'title': title
+    }).then((value) {
+      gamerIdTextController.clear();
+      titleTextController.clear();
+      FocusScope.of(context).unfocus();
 
-    // TODO: Add success handling
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                PostDetailsScreen(id: value.id, game: gameTitle),
+          ));
+    }).catchError((error) => print("Failed to add user: $error"));
   }
 }

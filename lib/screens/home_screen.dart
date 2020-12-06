@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lfg_app/models/game_model.dart';
 import 'package:lfg_app/screens/browse_screen.dart';
+import 'package:lfg_app/screens/post_overview.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -54,7 +55,7 @@ class HomeScreenState extends State<HomeScreen> {
     final double itemHeight =
         (size.height - kToolbarHeight - kBottomNavigationBarHeight - 24) / 3;
     final double itemWidth = size.width / 2;
-    print(size.width);
+
     return CupertinoPageScaffold(
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -91,18 +92,33 @@ class HomeScreenState extends State<HomeScreen> {
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           return new Container(
-                            color: Colors.green,
-                            margin: new EdgeInsets.all(1.0),
-                            child: new Center(
-                              child: new Text(
-                                snapshot.data.elementAt(index).title,
-                                style: new TextStyle(
-                                  fontSize: 50.0,
-                                  color: Colors.white,
+                              color: Colors.blue,
+                              margin: new EdgeInsets.all(1.0),
+                              child: GestureDetector(
+                                onTap: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            PostOverviewScreen(
+                                                id: snapshot.data
+                                                    .elementAt(index)
+                                                    .id,
+                                                title: snapshot.data
+                                                    .elementAt(index)
+                                                    .title),
+                                      ))
+                                },
+                                child: new Center(
+                                  child: new Text(
+                                    snapshot.data.elementAt(index).title,
+                                    style: new TextStyle(
+                                      fontSize: 50.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
+                              ));
                         },
                         childCount: 6,
                       ),

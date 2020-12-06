@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lfg_app/models/post_model.dart';
+import 'package:lfg_app/screens/post_details.dart';
 
 class PostOverviewScreen extends StatefulWidget {
   final String id;
@@ -70,28 +71,39 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
                     padding: const EdgeInsets.all(8),
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                          color: Colors.blue,
-                          child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        snapshot.data[index].title,
-                                        style: TextStyle(fontSize: 20),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          "${snapshot.data[index].platform} - ${snapshot.data[index].gamerId}")
-                                    ],
-                                  )
-                                ],
-                              )));
+                      return GestureDetector(
+                        onTap: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostDetailsScreen(
+                                    id: snapshot.data.elementAt(index).id,
+                                    game: widget.title),
+                              ))
+                        },
+                        child: Container(
+                            color: Colors.blue,
+                            child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          snapshot.data[index].title,
+                                          style: TextStyle(fontSize: 20),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                            "${snapshot.data[index].platform} - ${snapshot.data[index].gamerId}")
+                                      ],
+                                    )
+                                  ],
+                                ))),
+                      );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
                         const Divider(),

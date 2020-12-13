@@ -215,6 +215,9 @@ class ProfileScreenState extends State<ProfileScreen> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+
+      signInEmailTextController.clear();
+      signInPasswordTextController.clear();
     } on FirebaseAuthException {
       setState(() {
         errorMessage = "Wrong credentails";

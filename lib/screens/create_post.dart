@@ -329,7 +329,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     }
 
     String gameId = this.allGames.elementAt(gameSelectedValue).id;
-    String gameTitle = this.allGames.elementAt(gameSelectedValue).title;
+    Game game = this.allGames.elementAt(gameSelectedValue);
 
     String platform;
     switch (platformId) {
@@ -357,8 +357,11 @@ class CreatePostScreenState extends State<CreatePostScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                PostDetailsScreen(id: value.id, game: gameTitle),
+            builder: (context) => PostDetailsScreen(
+              id: value.id,
+              game: game.title,
+              image: game.image,
+            ),
           ));
     }).catchError((error) => print("Failed to add user: $error"));
   }

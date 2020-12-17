@@ -74,8 +74,8 @@ class BrowseScreenState extends State<BrowseScreen> {
                     context: context,
                     removeTop: true,
                     child: GridView(
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200.0,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
                         mainAxisSpacing: 1.0,
                         crossAxisSpacing: 1.0,
                         childAspectRatio: 0.75,

@@ -9,6 +9,7 @@ final GlobalKey<NavigatorState> profileTabNavKey = GlobalKey<NavigatorState>();
 
 void main() {
   runApp(new CupertinoApp(
+    debugShowCheckedModeBanner: false,
     home: new LfgApp(),
     localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
       DefaultMaterialLocalizations.delegate,

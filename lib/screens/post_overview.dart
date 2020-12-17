@@ -18,34 +18,18 @@ class PostOverviewScreen extends StatefulWidget {
 }
 
 class PostOverviewScreenState extends State<PostOverviewScreen> {
-  CollectionReference postsCollection =
-      FirebaseFirestore.instance.collection('posts');
-
-  Future<List<Post>> futurePosts;
-
   @override
   void initState() {
     super.initState();
-    futurePosts = fetchPosts();
-  }
-
-  Future<List<Post>> fetchPosts() async {
-    final response =
-        await postsCollection.where("game", isEqualTo: widget.id).get();
-
-    List<Post> postsList = List();
-    if (response.size > 0) {
-      response.docs.forEach((element) {
-        Post post = Post.fromJson(element.data(), element.id);
-        postsList.add(post);
-      });
-      return postsList;
-    }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    Query posts = FirebaseFirestore.instance
+        .collection('posts')
+        .where("game", isEqualTo: widget.id)
+        .orderBy("created", descending: true);
+
     return CupertinoPageScaffold(
       child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -63,71 +47,76 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
               )
             ];
           },
-          body: FutureBuilder(
-              future: futurePosts,
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<Post>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-                  if (!snapshot.hasData) {
-                    return Container(
-                      padding: EdgeInsets.only(top: 20),
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        'GO BE THE FIRST TO CREATE A POST!',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }
-                  return ListView.separated(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PostDetailsScreen(
-                                  id: snapshot.data.elementAt(index).id,
-                                  game: widget.title,
-                                  image: widget.image,
-                                ),
-                              ))
-                        },
-                        child: Container(
-                            color: Colors.blue,
-                            child: Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                            child: Text(
-                                          snapshot.data[index].title,
-                                          style: TextStyle(fontSize: 20),
-                                        ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                            "${snapshot.data[index].platform} - ${snapshot.data[index].gamerId}")
-                                      ],
-                                    )
-                                  ],
-                                ))),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
-                  );
-                } else {
+          body: StreamBuilder(
+              stream: posts.snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 }
+
+                if (snapshot.data.docs.length < 1) {
+                  return Container(
+                    padding: EdgeInsets.only(top: 20),
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      'GO BE THE FIRST TO CREATE A POST!',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  );
+                }
+
+                Iterable<Post> postList = snapshot.data.docs
+                    .map((e) => Post.fromJson(e.data(), e.id));
+
+                return ListView.separated(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: postList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () => {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PostDetailsScreen(
+                                id: postList.elementAt(index).id,
+                                game: widget.title,
+                                image: widget.image,
+                              ),
+                            ))
+                      },
+                      child: Container(
+                          color: Colors.blue,
+                          child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Flexible(
+                                          child: Text(
+                                        postList.elementAt(index).title,
+                                        style: TextStyle(fontSize: 20),
+                                      ))
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${postList.elementAt(index).platform} - ${postList.elementAt(index).gamerId}")
+                                    ],
+                                  )
+                                ],
+                              ))),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                );
               })),
     );
   }

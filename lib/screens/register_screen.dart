@@ -60,6 +60,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       ),
                       CupertinoTextField(
                         controller: signInEmailTextController,
+                        keyboardType: TextInputType.emailAddress,
                         cursorColor: Color.fromARGB(255, 117, 190, 255),
                         decoration: BoxDecoration(
                             color: Color.fromARGB(0, 0, 0, 0),

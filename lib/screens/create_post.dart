@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -206,6 +207,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                         ),
                         CupertinoTextField(
                           controller: gamerIdTextController,
+                          textCapitalization: TextCapitalization.sentences,
                           cursorColor: Color.fromARGB(255, 117, 190, 255),
                           decoration: BoxDecoration(
                               color: Color.fromARGB(0, 0, 0, 0),
@@ -234,6 +236,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                         ),
                         CupertinoTextField(
                           controller: titleTextController,
+                          textCapitalization: TextCapitalization.sentences,
                           cursorColor: Color.fromARGB(255, 117, 190, 255),
                           decoration: BoxDecoration(
                               color: Color.fromARGB(0, 0, 0, 0),
@@ -348,7 +351,9 @@ class CreatePostScreenState extends State<CreatePostScreen> {
       'game': gameId,
       'platform': platform,
       'gamerId': gamerId,
-      'title': title
+      'title': title,
+      'created': FieldValue.serverTimestamp(),
+      'user': auth.currentUser.uid
     }).then((value) {
       gamerIdTextController.clear();
       titleTextController.clear();

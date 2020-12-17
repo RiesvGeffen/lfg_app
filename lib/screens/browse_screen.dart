@@ -90,7 +90,8 @@ class BrowseScreenState extends State<BrowseScreen> {
                                           builder: (context) =>
                                               PostOverviewScreen(
                                                   id: game.id,
-                                                  title: game.title),
+                                                  title: game.title,
+                                                  image: game.image),
                                         ))
                                   },
                                   child: new Image.network(

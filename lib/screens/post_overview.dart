@@ -8,8 +8,10 @@ import 'package:lfg_app/screens/post_details.dart';
 class PostOverviewScreen extends StatefulWidget {
   final String id;
   final String title;
+  final String image;
 
-  PostOverviewScreen({Key key, this.id, this.title}) : super(key: key);
+  PostOverviewScreen({Key key, this.id, this.title, this.image})
+      : super(key: key);
 
   @override
   PostOverviewScreenState createState() => PostOverviewScreenState();
@@ -49,6 +51,10 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               CupertinoSliverNavigationBar(
+                trailing: new Image.network(
+                  widget.image,
+                  fit: BoxFit.cover,
+                ),
                 largeTitle: Text(
                   widget.title,
                   style: TextStyle(color: Colors.white),
@@ -84,8 +90,10 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PostDetailsScreen(
-                                    id: snapshot.data.elementAt(index).id,
-                                    game: widget.title),
+                                  id: snapshot.data.elementAt(index).id,
+                                  game: widget.title,
+                                  image: widget.image,
+                                ),
                               ))
                         },
                         child: Container(
@@ -96,10 +104,11 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text(
+                                        Flexible(
+                                            child: Text(
                                           snapshot.data[index].title,
                                           style: TextStyle(fontSize: 20),
-                                        )
+                                        ))
                                       ],
                                     ),
                                     Row(

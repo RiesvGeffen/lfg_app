@@ -104,7 +104,10 @@ class HomeScreenState extends State<HomeScreen> {
                                                     .id,
                                                 title: snapshot.data
                                                     .elementAt(index)
-                                                    .title),
+                                                    .title,
+                                                image: snapshot.data
+                                                    .elementAt(index)
+                                                    .image),
                                       ))
                                 },
                                 child: new Image.network(

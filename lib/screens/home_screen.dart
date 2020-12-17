@@ -84,15 +84,13 @@ class HomeScreenState extends State<HomeScreen> {
                     }
                     return SliverGrid(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 1.0,
-                        crossAxisSpacing: 1.0,
-                        childAspectRatio: (itemWidth / itemHeight),
-                      ),
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 1.0,
+                          crossAxisSpacing: 1.0,
+                          childAspectRatio: 0.75),
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           return new Container(
-                              color: Colors.blue,
                               margin: new EdgeInsets.all(1.0),
                               child: GestureDetector(
                                 onTap: () => {
@@ -109,14 +107,9 @@ class HomeScreenState extends State<HomeScreen> {
                                                     .title),
                                       ))
                                 },
-                                child: new Center(
-                                  child: new Text(
-                                    snapshot.data.elementAt(index).title,
-                                    style: new TextStyle(
-                                      fontSize: 50.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                child: new Image.network(
+                                  snapshot.data.elementAt(index).image,
+                                  fit: BoxFit.cover,
                                 ),
                               ));
                         },

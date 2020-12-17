@@ -77,11 +77,10 @@ class BrowseScreenState extends State<BrowseScreen> {
                         maxCrossAxisExtent: 200.0,
                         mainAxisSpacing: 1.0,
                         crossAxisSpacing: 1.0,
-                        childAspectRatio: (itemWidth / itemHeight),
+                        childAspectRatio: 0.75,
                       ),
                       children: snapshot.data
                           .map((game) => Container(
-                                color: Colors.blue,
                                 margin: new EdgeInsets.all(1.0),
                                 child: GestureDetector(
                                   onTap: () => {
@@ -94,14 +93,9 @@ class BrowseScreenState extends State<BrowseScreen> {
                                                   title: game.title),
                                         ))
                                   },
-                                  child: new Center(
-                                    child: new Text(
-                                      game.title,
-                                      style: new TextStyle(
-                                        fontSize: 50.0,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                  child: new Image.network(
+                                    game.image,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ))

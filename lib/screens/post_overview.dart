@@ -65,7 +65,14 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
                     return Text('${snapshot.error}');
                   }
                   if (!snapshot.hasData) {
-                    return Text('No Data Found');
+                    return Container(
+                      padding: EdgeInsets.only(top: 20),
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        'GO BE THE FIRST TO CREATE A POST!',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    );
                   }
                   return ListView.separated(
                     padding: const EdgeInsets.all(8),

@@ -51,6 +51,7 @@ class PostOverviewScreenState extends State<PostOverviewScreen> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               CupertinoSliverNavigationBar(
+                previousPageTitle: "Back",
                 trailing: new Image.network(
                   widget.image,
                   fit: BoxFit.cover,

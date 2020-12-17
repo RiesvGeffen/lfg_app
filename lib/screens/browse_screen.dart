@@ -51,6 +51,7 @@ class BrowseScreenState extends State<BrowseScreen> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             CupertinoSliverNavigationBar(
+              previousPageTitle: "Home",
               largeTitle: Text(
                 'Browse',
                 style: TextStyle(color: Colors.white),

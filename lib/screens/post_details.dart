@@ -46,6 +46,7 @@ class PostDetailsScreenState extends State<PostDetailsScreen> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             CupertinoSliverNavigationBar(
+              previousPageTitle: "Back",
               largeTitle: Text(
                 widget.game,
                 style: TextStyle(color: Colors.white),
@@ -63,6 +64,7 @@ class PostDetailsScreenState extends State<PostDetailsScreen> {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 CupertinoSliverNavigationBar(
+                  previousPageTitle: "Back",
                   largeTitle: Text(
                     widget.game,
                     style: TextStyle(color: Colors.white),

@@ -30,6 +30,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
           CupertinoSliverNavigationBar(
+            previousPageTitle: "Sign In",
             largeTitle: Text(
               'Sign Up',
               style: TextStyle(color: Colors.white),

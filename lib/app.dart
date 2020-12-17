@@ -15,6 +15,9 @@ class LfgApp extends StatefulWidget {
 }
 
 class LfgAppState extends State<LfgApp> {
+  final CupertinoTabController _tabController = CupertinoTabController();
+  GlobalKey<LfgAppState> _myKey = GlobalKey();
+
   bool _initialized = false;
   bool _error = false;
 
@@ -55,6 +58,7 @@ class LfgAppState extends State<LfgApp> {
 
     // Main view
     return CupertinoTabScaffold(
+      controller: _tabController,
       tabBar: CupertinoTabBar(
         activeColor: Color.fromARGB(255, 117, 190, 255),
         inactiveColor: Colors.white,
@@ -93,7 +97,9 @@ class LfgAppState extends State<LfgApp> {
         } else if (index == 1) {
           return CupertinoTabView(
             navigatorKey: createPostTabNavKey,
-            builder: (BuildContext context) => CreatePostScreen(),
+            builder: (BuildContext context) => CreatePostScreen(
+              setTabIndex: setTabIndex,
+            ),
           );
         } else {
           return CupertinoTabView(
@@ -103,5 +109,9 @@ class LfgAppState extends State<LfgApp> {
         }
       },
     );
+  }
+
+  void setTabIndex(_index) {
+    _tabController.index = _index;
   }
 }

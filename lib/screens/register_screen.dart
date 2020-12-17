@@ -31,7 +31,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         return <Widget>[
           CupertinoSliverNavigationBar(
             largeTitle: Text(
-              'Sing Up',
+              'Sign Up',
               style: TextStyle(color: Colors.white),
             ),
           )

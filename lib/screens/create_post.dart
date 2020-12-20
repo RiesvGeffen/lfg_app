@@ -253,7 +253,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: RaisedButton(
-                      color: Color.fromARGB(255, 56, 62, 74),
+                      color: Colors.blue,
                       child: Text(
                         'POST',
                         style:
@@ -353,7 +353,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
       'gamerId': gamerId,
       'title': title,
       'created': FieldValue.serverTimestamp(),
-      'user': auth.currentUser.uid
+      'userRef': FirebaseFirestore.instance.doc('users/${auth.currentUser.uid}')
     }).then((value) {
       gamerIdTextController.clear();
       titleTextController.clear();
@@ -368,6 +368,6 @@ class CreatePostScreenState extends State<CreatePostScreen> {
               image: game.image,
             ),
           ));
-    }).catchError((error) => print("Failed to add user: $error"));
+    }).catchError((error) => print("Failed to add post: $error"));
   }
 }

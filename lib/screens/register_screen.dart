@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,14 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
+  CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
+
   FirebaseAuth auth = FirebaseAuth.instance;
   String errorMessage = "";
 
   final signInEmailTextController = TextEditingController();
+  final signInUsernameTextController = TextEditingController();
   final signInPasswordTextController = TextEditingController();
   final signInRepeatPasswordTextController = TextEditingController();
 
@@ -61,6 +66,34 @@ class RegisterScreenState extends State<RegisterScreen> {
                       CupertinoTextField(
                         controller: signInEmailTextController,
                         keyboardType: TextInputType.emailAddress,
+                        cursorColor: Color.fromARGB(255, 117, 190, 255),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(0, 0, 0, 0),
+                            border: Border(
+                                bottom: BorderSide(
+                              color: Color.fromARGB(255, 56, 62, 74),
+                              width: 2,
+                            ))),
+                      )
+                    ],
+                  ),
+                ),
+                // USERNAME
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 4),
+                        child: Text(
+                          'USERNAME',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(letterSpacing: 1.5),
+                        ),
+                      ),
+                      CupertinoTextField(
+                        controller: signInUsernameTextController,
                         cursorColor: Color.fromARGB(255, 117, 190, 255),
                         decoration: BoxDecoration(
                             color: Color.fromARGB(0, 0, 0, 0),
@@ -164,10 +197,14 @@ class RegisterScreenState extends State<RegisterScreen> {
     });
 
     String email = signInEmailTextController.text.trim();
+    String username = signInUsernameTextController.text.trim();
     String password = signInPasswordTextController.text.trim();
     String repeatPassword = signInRepeatPasswordTextController.text.trim();
 
-    if (email == '' || password == '' || repeatPassword == '') {
+    if (email == '' ||
+        username == '' ||
+        password == '' ||
+        repeatPassword == '') {
       setState(() {
         errorMessage = "Please fill in all fields";
       });
@@ -180,13 +217,20 @@ class RegisterScreenState extends State<RegisterScreen> {
     }
 
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await auth.createUserWithEmailAndPassword(
+          email: email, password: password);
 
-      signInEmailTextController.clear();
-      signInPasswordTextController.clear();
-      signInRepeatPasswordTextController.clear();
-      Navigator.of(context).pop();
+      await usersCollection.doc(auth.currentUser.uid).set({
+        'username': username,
+        'email': email,
+        'created': FieldValue.serverTimestamp(),
+      }).then((value) {
+        signInEmailTextController.clear();
+        signInUsernameTextController.clear();
+        signInPasswordTextController.clear();
+        signInRepeatPasswordTextController.clear();
+        Navigator.of(context).pop();
+      }).catchError((error) => print("Failed to add user: $error"));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         setState(() {

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lfg_app/models/post_model.dart';
+import 'package:lfg_app/widgets/comment_section.dart';
 
 class PostDetailsScreen extends StatefulWidget {
   final String id;
@@ -59,6 +60,7 @@ class PostDetailsScreenState extends State<PostDetailsScreen> {
     } else {
       // VIEW WHEN DATA IS FETCHED
       return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: false,
         child: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
@@ -72,69 +74,64 @@ class PostDetailsScreenState extends State<PostDetailsScreen> {
                 )
               ];
             },
-            body: Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Text(
-                    post.title,
-                    style: TextStyle(fontSize: 36),
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "Platform: ",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Text(
-                                  "\t\t ${post.platform}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24),
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Gamer ID: ",
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Text(
-                                  "\t ${post.gamerId}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24),
-                                )
-                              ],
-                            )
-                          ],
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text(
+                      post.title,
+                      style: TextStyle(fontSize: 36),
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Platform: ",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  Text(
+                                    "\t\t ${post.platform}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Gamer ID: ",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                  Text(
+                                    "\t ${post.gamerId}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      new Image.network(
-                        widget.image,
-                        width: 100,
-                      )
-                    ],
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 100),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Comments:",
-                            style: TextStyle(fontSize: 28),
-                          )
-                        ],
-                      ))
-                ],
+                        new Image.network(
+                          widget.image,
+                          width: 100,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [CommentSection(postId: widget.id)],
+                    )
+                  ],
+                ),
               ),
             )),
       );

@@ -67,10 +67,6 @@ class CommentSectionState extends State<CommentSection> {
 
   @override
   Widget build(BuildContext context) {
-    Query comments = commentsCollection
-        .where("postId", isEqualTo: widget.postId)
-        .orderBy("created", descending: true);
-
     return Expanded(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,16 +158,14 @@ class CommentSectionState extends State<CommentSection> {
       return;
     }
 
-    await commentsCollection
-      ..add({
-        'postId': widget.postId,
-        'message': reply,
-        'created': FieldValue.serverTimestamp(),
-        'userRef':
-            FirebaseFirestore.instance.doc('users/${auth.currentUser.uid}')
-      }).then((value) {
-        replyTextController.clear();
-        FocusScope.of(context).unfocus();
-      }).catchError((error) => print("Failed to add user: $error"));
+    await commentsCollection.add({
+      'postId': widget.postId,
+      'message': reply,
+      'created': FieldValue.serverTimestamp(),
+      'userRef': FirebaseFirestore.instance.doc('users/${auth.currentUser.uid}')
+    }).then((value) {
+      replyTextController.clear();
+      FocusScope.of(context).unfocus();
+    }).catchError((error) => print("Failed to add user: $error"));
   }
 }

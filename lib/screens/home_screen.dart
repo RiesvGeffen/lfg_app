@@ -51,11 +51,6 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    final double itemHeight =
-        (size.height - kToolbarHeight - kBottomNavigationBarHeight - 24) / 3;
-    final double itemWidth = size.width / 2;
-
     return CupertinoPageScaffold(
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {

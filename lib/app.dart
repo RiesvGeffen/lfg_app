@@ -16,7 +16,6 @@ class LfgApp extends StatefulWidget {
 
 class LfgAppState extends State<LfgApp> {
   final CupertinoTabController _tabController = CupertinoTabController();
-  GlobalKey<LfgAppState> _myKey = GlobalKey();
 
   bool _initialized = false;
   bool _error = false;

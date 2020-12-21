@@ -110,12 +110,13 @@ class PostDetailsScreenState extends State<PostDetailsScreen> {
                                     "Gamer ID: ",
                                     style: TextStyle(fontSize: 18),
                                   ),
-                                  Text(
+                                  Flexible(
+                                      child: Text(
                                     "\t ${post.gamerId}",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 24),
-                                  )
+                                  ))
                                 ],
                               )
                             ],

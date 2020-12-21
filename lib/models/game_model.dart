@@ -12,4 +12,9 @@ class Game {
       image: json['image'],
     );
   }
+
+  @override
+  String toString() {
+    return this.title;
+  }
 }

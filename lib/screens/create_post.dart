@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lfg_app/models/game_model.dart';
 import 'package:lfg_app/screens/post_details.dart';
+import 'package:lfg_app/widgets/picker_widget.dart';
 
 class CreatePostScreen extends StatefulWidget {
   final Function(int) setTabIndex;
@@ -15,10 +16,14 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class CreatePostScreenState extends State<CreatePostScreen> {
+  String errorMessage = "";
   final gamerIdTextController = TextEditingController();
   final titleTextController = TextEditingController();
-  int gameSelectedValue = 0;
-  int platformSelectedValue = 0;
+  int gameSelectedValue = -1;
+  int platformSelectedValue = -1;
+
+  List<String> allPlatforms =
+      new List.unmodifiable(["Playstation", "Xbox", "PC"]);
 
   CollectionReference postsCollection =
       FirebaseFirestore.instance.collection('posts');
@@ -26,7 +31,6 @@ class CreatePostScreenState extends State<CreatePostScreen> {
   CollectionReference gamesCollection =
       FirebaseFirestore.instance.collection('games');
 
-  Future<List<Game>> futureGames;
   List<Game> allGames;
 
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -35,7 +39,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    futureGames = fetchGames();
+    fetchGames();
 
     FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user == null) {
@@ -50,7 +54,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     });
   }
 
-  Future<List<Game>> fetchGames() async {
+  void fetchGames() async {
     final response = await gamesCollection.get();
 
     if (response.size > 0) {
@@ -60,9 +64,8 @@ class CreatePostScreenState extends State<CreatePostScreen> {
         gamesList.add(game);
       });
       this.allGames = gamesList;
-      return gamesList;
     } else {
-      throw Exception('Empty response');
+      throw Exception('No games found');
     }
   }
 
@@ -89,6 +92,7 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                 children: [
                   // GAME
                   Container(
+                    width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -104,43 +108,31 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                             style: TextStyle(letterSpacing: 1.5),
                           ),
                         ),
-                        FutureBuilder(
-                            future: futureGames,
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Game>> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                if (snapshot.hasError) {
-                                  return Text('${snapshot.error}');
-                                }
-                                if (!snapshot.hasData) {
-                                  return Text('No Data Found');
-                                }
-                                return CupertinoPicker(
-                                  onSelectedItemChanged: (value) {
-                                    setState(() {
-                                      gameSelectedValue = value;
-                                    });
-                                  },
-                                  itemExtent: 30,
-                                  children: snapshot.data
-                                      .map((game) => Text(
-                                            game.title,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontStyle: FontStyle.italic),
-                                          ))
-                                      .toList(),
-                                );
-                              } else {
-                                return const CircularProgressIndicator();
-                              }
-                            })
+                        Container(
+                          width: double.infinity,
+                          child: GestureDetector(
+                            onTap: () => {
+                              _showCustomTimePicker("Pick your game", allGames,
+                                  setGameSelectedValue, gameSelectedValue)
+                            },
+                            child: Text(
+                              gameSelectedValue == -1
+                                  ? "Select your game"
+                                  : allGames
+                                      .elementAt(gameSelectedValue)
+                                      .toString(),
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
                   // PLATFORM
                   Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -157,34 +149,24 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: CupertinoPicker(
-                            onSelectedItemChanged: (value) {
-                              setState(() {
-                                platformSelectedValue = value;
-                              });
+                          width: double.infinity,
+                          child: GestureDetector(
+                            onTap: () => {
+                              _showCustomTimePicker(
+                                  "Pick your platform",
+                                  allPlatforms,
+                                  setPlatformSelectedValue,
+                                  platformSelectedValue)
                             },
-                            itemExtent: 30,
-                            children: const [
-                              Text(
-                                'Select your platform',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                              Text(
-                                'Playstation',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                'Xbox',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                'PC',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
+                            child: Text(
+                              platformSelectedValue == -1
+                                  ? "Select your platform"
+                                  : allPlatforms
+                                      .elementAt(platformSelectedValue)
+                                      .toString(),
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         )
                       ],
@@ -262,7 +244,8 @@ class CreatePostScreenState extends State<CreatePostScreen> {
                         submitForm();
                       },
                     ),
-                  )
+                  ),
+                  Text(errorMessage, style: TextStyle(color: Colors.red))
                 ],
               ),
             ),
@@ -318,42 +301,68 @@ class CreatePostScreenState extends State<CreatePostScreen> {
     }
   }
 
-  submitForm() async {
+  void setPlatformSelectedValue(int newValue) {
+    this.platformSelectedValue = newValue;
+  }
+
+  void setGameSelectedValue(int newValue) {
+    this.gameSelectedValue = newValue;
+  }
+
+  void _showCustomTimePicker(
+      String title, List values, Function(int) setNewValue, int initialValue) {
+    showModalBottomSheet(
+        backgroundColor: Colors.blueGrey,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        ),
+        context: context,
+        builder: (context) => ModalPickerWidget(
+            title: title,
+            values: values,
+            onChange: (newValue) => setNewValue(newValue),
+            initialValue: initialValue)).whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  void submitForm() async {
+    if (errorMessage != "") {
+      setState(() {
+        errorMessage = "";
+      });
+    }
+
     // Get values
-    int platformId = platformSelectedValue;
     String gamerId = gamerIdTextController.text.trim();
     String title = titleTextController.text.trim();
 
     // Validation
-    if (platformId == 0 || gamerId == '' || title == '') {
-      // Form is not valid
+    if (platformSelectedValue == -1 ||
+        gameSelectedValue == -1 ||
+        gamerId == '' ||
+        title == '') {
+      setState(() {
+        errorMessage = "Please fill in all fields";
+      });
       return;
     }
 
-    String gameId = this.allGames.elementAt(gameSelectedValue).id;
-    Game game = this.allGames.elementAt(gameSelectedValue);
-
-    String platform;
-    switch (platformId) {
-      case 1:
-        platform = "Playstation";
-        break;
-      case 2:
-        platform = "Xbox";
-        break;
-      case 3:
-        platform = "PC";
-        break;
-    }
+    Game game = allGames.elementAt(gameSelectedValue);
+    String platform = allPlatforms.elementAt(platformSelectedValue);
 
     await postsCollection.add({
-      'game': gameId,
+      'game': game.id,
       'platform': platform,
       'gamerId': gamerId,
       'title': title,
       'created': FieldValue.serverTimestamp(),
       'userRef': FirebaseFirestore.instance.doc('users/${auth.currentUser.uid}')
     }).then((value) {
+      setState(() {
+        platformSelectedValue = -1;
+        gameSelectedValue = -1;
+      });
       gamerIdTextController.clear();
       titleTextController.clear();
       FocusScope.of(context).unfocus();

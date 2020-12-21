@@ -47,19 +47,26 @@ class CommentSectionState extends State<CommentSection> {
         .orderBy("created", descending: true)
         .snapshots()
         .listen((QuerySnapshot event) {
-      if (event.docs.length > 0) {
-        List<Comment> _commentList = List();
-        event.docs.forEach((element) {
-          Comment comment = Comment.fromJson(element.data(), element.id);
-          element.data()["userRef"].get().then((DocumentSnapshot doc) {
+      if (event.docChanges.length > 0) {
+        event.docChanges.forEach((element) {
+          if (element.doc.data()["created"] == null) return;
+
+          Comment comment =
+              Comment.fromJson(element.doc.data(), element.doc.id);
+          element.doc.data()["userRef"].get().then((DocumentSnapshot doc) {
             setState(() {
               comment.author = doc.data()["username"];
             });
           });
-          _commentList.add(comment);
-        });
-        setState(() {
-          commentList = _commentList;
+          if (event.docChanges.length == 1) {
+            setState(() {
+              commentList.insert(0, comment);
+            });
+          } else {
+            setState(() {
+              commentList.add(comment);
+            });
+          }
         });
       }
     });

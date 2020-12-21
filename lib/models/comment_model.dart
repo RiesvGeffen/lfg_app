@@ -14,7 +14,7 @@ class Comment {
     return Comment(
       id: id,
       message: json['message'],
-      created: timeago.format(_created.toDate()),
+      created: timeago.format(_created?.toDate()),
     );
   }
 }
